@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Sparkles, CheckCircle2, Send, Link, Copy, ShieldCheck, Edit3 } from 'lucide-react';
 
 interface LaunchCampaignModalProps {
@@ -32,6 +32,16 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
   const [discountAmount, setDiscountAmount] = useState(50);
   const [targetCount, setTargetCount] = useState(initialOffer.targetCount);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const dynamicCost = `₹${(targetCount * discountAmount).toLocaleString('en-IN')}`;
@@ -52,13 +62,23 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fadeIn">
-      <div className="relative w-full max-w-lg bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-xl">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fadeIn"
+      onClick={onClose}
+    >
+      <div 
+        className="relative w-full max-w-lg bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-2xl animate-slideUp"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="campaign-modal-title"
+      >
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-colors"
+          aria-label="Close modal"
         >
           <X className="w-4 h-4" />
         </button>
@@ -66,33 +86,33 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
         {step === 'confirm' && (
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded bg-[#0052FF]/10 border border-[#0052FF]/20 flex items-center justify-center text-[#0052FF]">
+              <div className="w-10 h-10 rounded-xl bg-[#0052FF]/10 border border-[#0052FF]/20 flex items-center justify-center text-[#0052FF]">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">Dynamic Campaign Launch</h3>
-                <p className="text-xs text-slate-500">Jointly approved by AI Bazaar & AI Munim</p>
+                <h3 id="campaign-modal-title" className="text-base font-extrabold text-slate-900">Dynamic Campaign Launch</h3>
+                <p className="text-xs text-slate-500 font-medium">Jointly approved by AI Bazaar &amp; AI Munim</p>
               </div>
             </div>
 
             {/* Editable Offer Inputs */}
-            <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6 text-xs">
+            <div className="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6 text-xs font-medium">
               <div className="flex items-center justify-between gap-2">
-                <label className="text-slate-600 font-semibold">Coupon Code:</label>
+                <label className="text-slate-600 font-extrabold">Coupon Code:</label>
                 <input
                   type="text"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                  className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-[#0052FF] text-right focus:outline-none focus:border-[#0052FF]"
+                  className="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-mono font-extrabold text-[#0052FF] text-right focus:outline-none focus:border-[#0052FF]"
                 />
               </div>
 
               <div className="flex items-center justify-between gap-2">
-                <label className="text-slate-600 font-semibold">Discount Amount (₹):</label>
+                <label className="text-slate-600 font-extrabold">Discount Amount (₹):</label>
                 <select
                   value={discountAmount}
                   onChange={(e) => setDiscountAmount(Number(e.target.value))}
-                  className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0052FF]"
+                  className="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-extrabold text-slate-800 focus:outline-none focus:border-[#0052FF]"
                 >
                   <option value={30}>₹30 OFF (Small)</option>
                   <option value={50}>₹50 OFF (Standard)</option>
@@ -100,30 +120,30 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
                 </select>
               </div>
 
-              <div className="flex justify-between py-1 border-t border-slate-200 pt-2">
+              <div className="flex justify-between py-1 border-t border-slate-200/80 pt-2">
                 <span className="text-slate-600">Target Segment:</span>
-                <span className="font-bold text-slate-900">{targetCount} Dormant High-Value Customers</span>
+                <span className="font-extrabold text-slate-900">{targetCount} Dormant High-Value Customers</span>
               </div>
-              <div className="flex justify-between py-1 border-t border-slate-200 pt-2">
+              <div className="flex justify-between py-1 border-t border-slate-200/80 pt-2">
                 <span className="text-slate-600">Max Projected Spend:</span>
-                <span className="font-bold text-[#059669]">{dynamicCost}</span>
+                <span className="font-extrabold text-[#059669]">{dynamicCost}</span>
               </div>
-              <div className="flex justify-between py-1 border-t border-slate-200 pt-2">
+              <div className="flex justify-between py-1 border-t border-slate-200/80 pt-2">
                 <span className="text-slate-600">Expected Revenue Upside:</span>
-                <span className="font-bold text-[#0052FF]">{dynamicUpside}</span>
+                <span className="font-extrabold text-[#0052FF]">{dynamicUpside}</span>
               </div>
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={onClose}
-                className="w-1/2 py-2.5 rounded bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200 transition-colors"
+                className="w-1/2 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-extrabold text-xs hover:bg-slate-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleLaunch}
-                className="w-1/2 py-2.5 rounded bg-[#0052FF] hover:bg-[#0043D6] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+                className="w-1/2 py-2.5 rounded-xl bg-[#0052FF] hover:bg-[#0043D6] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
               >
                 <Send className="w-3.5 h-3.5" />
                 Launch Campaign
@@ -137,8 +157,8 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
             <div className="w-12 h-12 rounded-full bg-[#0052FF]/10 border border-[#0052FF]/30 flex items-center justify-center mx-auto mb-4 text-[#0052FF] animate-spin">
               <Sparkles className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-bold text-slate-900 mb-2">Generating Dynamic Razorpay Payment Links...</h3>
-            <p className="text-xs text-slate-500 mb-6">Broadcasting targeted SMS notifications to {targetCount} customers</p>
+            <h3 className="text-sm font-extrabold text-slate-900 mb-2">Generating Dynamic Razorpay Payment Links...</h3>
+            <p className="text-xs text-slate-500 mb-6 font-medium">Broadcasting targeted SMS notifications to {targetCount} customers</p>
 
             <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200 mb-2">
               <div
@@ -146,7 +166,7 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-xs font-mono text-[#0052FF]">{progress}% completed</span>
+            <span className="text-xs font-mono font-bold text-[#0052FF]">{progress}% completed</span>
           </div>
         )}
 
@@ -155,18 +175,18 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
             <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center mx-auto mb-4 text-[#059669]">
               <CheckCircle2 className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1">Campaign Live & Active!</h3>
-            <p className="text-xs text-slate-600 mb-6">
+            <h3 className="text-base font-extrabold text-slate-900 mb-1">Campaign Live &amp; Active!</h3>
+            <p className="text-xs text-slate-600 mb-6 font-medium">
               SMS broadcast sent to <strong className="text-slate-900">{targetCount} customers</strong> with embedded Razorpay payment link.
             </p>
 
-            <div className="bg-slate-50 p-4 rounded-xl border border-emerald-200 mb-6 text-left">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Dynamic Razorpay Payment Link</span>
-              <div className="flex items-center justify-between gap-2 bg-white p-2.5 rounded border border-slate-200">
-                <span className="text-xs font-mono text-[#0052FF] truncate">{dynamicRzpLink}</span>
+            <div className="bg-slate-50 p-4 rounded-2xl border border-emerald-200 mb-6 text-left">
+              <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Dynamic Razorpay Payment Link</span>
+              <div className="flex items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-slate-200">
+                <span className="text-xs font-mono text-[#0052FF] truncate font-bold">{dynamicRzpLink}</span>
                 <button
                   onClick={() => alert(`Dynamic Razorpay Payment Link (${dynamicRzpLink}) copied!`)}
-                  className="px-2.5 py-1 rounded bg-[#0052FF]/10 text-[#0052FF] hover:bg-[#0052FF]/20 text-xs font-semibold flex items-center gap-1 shrink-0"
+                  className="px-2.5 py-1 rounded-lg bg-[#0052FF]/10 text-[#0052FF] hover:bg-[#0052FF]/20 text-xs font-bold flex items-center gap-1 shrink-0"
                 >
                   <Copy className="w-3 h-3" />
                   Copy
@@ -179,9 +199,9 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
                 setStep('confirm');
                 onClose();
               }}
-              className="w-full py-2.5 rounded bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs shadow-sm transition-colors"
+              className="w-full py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs shadow-md transition-all active:scale-95"
             >
-              Done & Return to Dashboard
+              Done &amp; Return to Dashboard
             </button>
           </div>
         )}
@@ -190,3 +210,4 @@ export const LaunchCampaignModal: React.FC<LaunchCampaignModalProps> = ({
     </div>
   );
 };
+
