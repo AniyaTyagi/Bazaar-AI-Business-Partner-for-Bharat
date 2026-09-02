@@ -43,7 +43,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
       aria-modal="true"
     >
       <div className="bg-white rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden animate-slideUp">
-        
+
         {/* MODAL HEADER */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
         {/* STEP 1: ORDER REVIEW */}
         {paymentStep === 'review' && (
           <div className="p-6 space-y-5">
-            
+
             {/* ORDER DETAILS */}
             <div className="space-y-3">
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs">
@@ -117,7 +117,7 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
                 </div>
                 <div>
                   <p className="text-xs font-extrabold text-slate-900">Razorpay UPI Payment</p>
-                  <p className="text-[11px] text-slate-500 font-mono">UPI ID: ramesh@gpay (•••• 4821)</p>
+                  <p className="text-[11px] text-slate-500 font-mono">UPI ID: Aniya@gpay (•••• 4821)</p>
                 </div>
               </div>
               <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Auto-Verified</span>
@@ -156,9 +156,8 @@ export const PaymentCheckoutModal: React.FC<PaymentCheckoutModalProps> = ({
               {[0, 1, 2, 3].map((idx) => (
                 <div
                   key={idx}
-                  className={`w-10 h-12 rounded-xl border-2 flex items-center justify-center text-lg font-black ${
-                    upiPin.length > idx ? 'border-[#1B3A6B] bg-blue-50 text-[#1B3A6B]' : 'border-slate-200 bg-slate-50'
-                  }`}
+                  className={`w-10 h-12 rounded-xl border-2 flex items-center justify-center text-lg font-black ${upiPin.length > idx ? 'border-[#1B3A6B] bg-blue-50 text-[#1B3A6B]' : 'border-slate-200 bg-slate-50'
+                    }`}
                 >
                   {upiPin.length > idx ? '•' : ''}
                 </div>

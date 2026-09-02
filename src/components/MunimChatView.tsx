@@ -56,7 +56,7 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
     {
       id: 'msg_welcome',
       sender: 'munim',
-      text: "Namaste Ramesh! I'm Munim, your AI business partner. I'm monitoring your store's sales, stock levels, and cash flow. How can I help you today?",
+      text: "Namaste Aniya! I'm Munim, your AI business partner. I'm monitoring your store's sales, stock levels, and cash flow. How can I help you today?",
       timestamp: '9:00 AM',
     }
   ]);
@@ -214,7 +214,7 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
 
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
-      
+
       {/* HEADER BAR */}
       <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -259,14 +259,14 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
 
       {/* TWO COLUMN DESKTOP LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
+
         {/* LEFT COLUMN: CHAT STREAM */}
         <div className="lg:col-span-7 space-y-4">
           <div className="munim-card p-4 md:p-6 bg-white min-h-[480px] max-h-[600px] flex flex-col justify-between overflow-hidden">
-            
+
             {/* MESSAGES LIST */}
             <div className="space-y-4 overflow-y-auto pr-1 flex-1">
-              
+
               {/* EMPTY STATE CHIPS IF ONLY WELCOME */}
               {messages.length === 1 && (
                 <div className="text-center py-6 space-y-4">
@@ -274,7 +274,7 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
                     🤖
                   </div>
                   <div>
-                    <h3 className="text-sm font-extrabold text-slate-900">How can I help today, Ramesh?</h3>
+                    <h3 className="text-sm font-extrabold text-slate-900">How can I help today, Aniya?</h3>
                     <p className="text-xs text-slate-500 mt-0.5">Ask any question in your selected language or tap sample queries below</p>
                   </div>
 
@@ -316,11 +316,10 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
                 >
                   <div className="flex items-center gap-1.5 max-w-[85%] group">
                     <div
-                      className={`p-3.5 rounded-2xl text-xs font-medium leading-relaxed ${
-                        msg.sender === 'user'
+                      className={`p-3.5 rounded-2xl text-xs font-medium leading-relaxed ${msg.sender === 'user'
                           ? 'bg-[#1B3A6B] text-white rounded-br-none shadow-2xs font-semibold'
                           : 'bg-slate-100 text-slate-900 rounded-bl-none border border-slate-200/80'
-                      }`}
+                        }`}
                     >
                       {msg.text}
                     </div>
@@ -422,7 +421,7 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
                   type="text"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder={`Ask Munim in ${SUPPORTED_LANGUAGES.find(l=>l.code===selectedLanguage)?.name}...`}
+                  placeholder={`Ask Munim in ${SUPPORTED_LANGUAGES.find(l => l.code === selectedLanguage)?.name}...`}
                   className="flex-1 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:outline-none focus:border-[#1B3A6B] focus:bg-white transition-all"
                 />
 
@@ -450,7 +449,7 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
 
         {/* RIGHT COLUMN: AGENTIC WORKFLOW & CONTEXT CARD (DESKTOP) */}
         <div className="lg:col-span-5 space-y-4">
-          
+
           {/* AGENT ACTION TIMELINE CENTER */}
           <div className="munim-card p-5 bg-white space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -485,11 +484,10 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
               </div>
 
               <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
-                  activeRestockStep === 'finding_supplier' || activeRestockStep === 'best_match'
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${activeRestockStep === 'finding_supplier' || activeRestockStep === 'best_match'
                     ? 'bg-blue-100 text-[#1B3A6B]'
                     : 'bg-slate-100 text-slate-400'
-                }`}>
+                  }`}>
                   {activeRestockStep === 'best_match' ? '✓' : '3'}
                 </div>
                 <div>
@@ -499,9 +497,8 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
               </div>
 
               <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
-                  activeRestockStep === 'best_match' ? 'bg-blue-100 text-[#1B3A6B]' : 'bg-slate-100 text-slate-400'
-                }`}>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${activeRestockStep === 'best_match' ? 'bg-blue-100 text-[#1B3A6B]' : 'bg-slate-100 text-slate-400'
+                  }`}>
                   {activeRestockStep === 'best_match' ? '✓' : '4'}
                 </div>
                 <div>
@@ -511,9 +508,8 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
               </div>
 
               <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
-                  activeRestockStep === 'best_match' ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-slate-100 text-slate-400'
-                }`}>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${activeRestockStep === 'best_match' ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-slate-100 text-slate-400'
+                  }`}>
                   ⏳
                 </div>
                 <div>

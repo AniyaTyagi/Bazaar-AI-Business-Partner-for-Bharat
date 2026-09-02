@@ -10,7 +10,7 @@ interface ProactiveAlertsViewProps {
 export const ProactiveAlertsView: React.FC<ProactiveAlertsViewProps> = ({ onAction }) => {
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
-      
+
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -39,7 +39,7 @@ export const ProactiveAlertsView: React.FC<ProactiveAlertsViewProps> = ({ onActi
             </div>
             <div>
               <h2 className="text-sm font-black text-slate-900">Munim is working...</h2>
-              <p className="text-[11px] text-slate-500 font-bold">Task: Restock Inventory for Ramesh General Store</p>
+              <p className="text-[11px] text-slate-500 font-bold">Task: Restock Inventory for Aniya General Store</p>
             </div>
           </div>
           <span className="munim-badge-navy animate-pulse">AUTONOMOUS AGENT ACTIVE</span>
@@ -80,7 +80,7 @@ export const ProactiveAlertsView: React.FC<ProactiveAlertsViewProps> = ({ onActi
         </h3>
 
         <div className="space-y-3">
-          
+
           {/* STOCK ALERT */}
           <div className="munim-card p-5 bg-white border border-rose-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">

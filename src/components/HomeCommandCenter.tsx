@@ -16,14 +16,14 @@ export const HomeCommandCenter: React.FC<HomeCommandCenterProps> = ({
 }) => {
   return (
     <div className="space-y-6 animate-fadeIn pb-8">
-      
+
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-            Good morning, Ramesh 👋
+            Good morning, Aniya 👋
           </h1>
-          <p className="text-xs text-slate-500 font-bold mt-0.5">Ramesh General Store • Daily Operations Dashboard</p>
+          <p className="text-xs text-slate-500 font-bold mt-0.5">Aniya General Store • Daily Operations Dashboard</p>
         </div>
 
         <button
@@ -87,7 +87,7 @@ export const HomeCommandCenter: React.FC<HomeCommandCenterProps> = ({
                 <span className="munim-badge-navy">Proactive Intelligence</span>
               </h2>
               <p className="text-xs text-slate-600 font-medium">
-                Good morning, Ramesh. I found 2 things that need your attention today.
+                Good morning, Aniya. I found 2 things that need your attention today.
               </p>
             </div>
           </div>

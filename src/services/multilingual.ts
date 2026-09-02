@@ -36,8 +36,8 @@ export const DICTIONARY: Record<SupportedLanguage, MultilingualAnswers> = {
     cashflow: "Aaj ka hisaab: Jama ₹84,620, Kharcha ₹12,850. Kal Axis Bank account mein ₹31,200 ka settlement aayega. Supplier dues ₹12,850 hain aur aapka 7-day free cash ₹42,700 safe hai.",
     customers: "Is hafte aapke customers 42% zyada cold drinks aur evening snacks kharid rahe hain. Maine 47 dormant high-value customers identify kiye hain jinhone 14 din se order nahi kiya.",
     suppliers: "AI Bazaar ne 3 wholesale suppliers compare kiye hain: Sharma Distributors (₹3,770, Best Value), Gupta Wholesale (₹3,920), aur Metro Supply (₹4,100). Sharma Distributors se lene par ₹1,240 bachat hogi.",
-    health: "Ramesh General Store ka Business Health Score 78 / 100 hai (Healthy). Sales velocity 91 aur cash flow 82 par strong hain. Inventory turnover 67 par hai kyunki ₹18,000 slow detergent stock mein aatke hain.",
-    general: (q) => `Maine aapke sawal "${q}" ko Ramesh General Store ke data se check kiya hai. Aaj ki sales ₹84,620 hai, net profit ₹18,430 hai aur free cash buffer ₹42,700 hai.`
+    health: "Aniya General Store ka Business Health Score 78 / 100 hai (Healthy). Sales velocity 91 aur cash flow 82 par strong hain. Inventory turnover 67 par hai kyunki ₹18,000 slow detergent stock mein aatke hain.",
+    general: (q) => `Maine aapke sawal "${q}" ko Aniya General Store ke data se check kiya hai. Aaj ki sales ₹84,620 hai, net profit ₹18,430 hai aur free cash buffer ₹42,700 hai.`
   },
 
   hi: {
@@ -56,8 +56,8 @@ export const DICTIONARY: Record<SupportedLanguage, MultilingualAnswers> = {
     cashflow: "Today's ledger: Revenue ₹84,620, Expenses ₹12,850. Tomorrow's Axis Bank settlement will credit ₹31,200. Pending dues are ₹12,850 and your net free cash buffer is safe at ₹42,700.",
     customers: "Customers bought 42% more cold beverages and evening snacks this week. I identified 47 high-value dormant customers who haven't purchased in the last 14 days.",
     suppliers: "AI Bazaar compared 3 wholesale suppliers: Sharma Distributors (₹3,770, Best Value), Gupta Wholesale (₹3,920), and Metro Supply (₹4,100). Choosing Sharma Distributors saves ₹1,240.",
-    health: "Ramesh General Store has a Business Health Score of 78 / 100. Sales growth (91) and cash flow (82) are strong. Inventory turnover (67) has ₹18,000 stuck in slow-moving stock.",
-    general: (q) => `I analyzed your query "${q}" against Ramesh General Store's dataset. Today's sales are ₹84,620 with ₹18,430 net profit and ₹42,700 free cash balance.`
+    health: "Aniya General Store has a Business Health Score of 78 / 100. Sales growth (91) and cash flow (82) are strong. Inventory turnover (67) has ₹18,000 stuck in slow-moving stock.",
+    general: (q) => `I analyzed your query "${q}" against Aniya General Store's dataset. Today's sales are ₹84,620 with ₹18,430 net profit and ₹42,700 free cash balance.`
   },
 
   ta: {

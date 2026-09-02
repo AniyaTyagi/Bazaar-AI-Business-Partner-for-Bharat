@@ -28,7 +28,7 @@ export const BazaarTabView: React.FC<BazaarTabViewProps> = ({ onTriggerRestock }
 
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
-      
+
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -36,7 +36,7 @@ export const BazaarTabView: React.FC<BazaarTabViewProps> = ({ onTriggerRestock }
             <span>AI Bazaar Procurement</span>
             <span className="munim-badge-navy">Action Layer</span>
           </h1>
-          <p className="text-xs text-slate-500 font-bold mt-0.5">What does your business need today, Ramesh?</p>
+          <p className="text-xs text-slate-500 font-bold mt-0.5">What does your business need today, Aniya?</p>
         </div>
 
         <button
@@ -84,7 +84,7 @@ export const BazaarTabView: React.FC<BazaarTabViewProps> = ({ onTriggerRestock }
       {/* RECOMMENDED FOR YOU CARDS */}
       <div className="space-y-4">
         <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
-          Recommended for Ramesh General Store
+          Recommended for Aniya General Store
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -103,11 +103,10 @@ export const BazaarTabView: React.FC<BazaarTabViewProps> = ({ onTriggerRestock }
 
                 <button
                   onClick={() => toggleItem(prod.id)}
-                  className={`w-full py-2 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all ${
-                    isAdded
+                  className={`w-full py-2 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all ${isAdded
                       ? 'bg-blue-100 text-blue-900 border border-blue-300'
                       : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                  }`}
+                    }`}
                 >
                   {isAdded ? (
                     <>

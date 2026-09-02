@@ -39,7 +39,7 @@ export const PRODUCTS_CATALOG: Omit<Product, 'salesCount' | 'revenue' | 'trendin
 ];
 
 const FIRST_NAMES = [
-  'Ramesh', 'Sunita', 'Vikram', 'Ananya', 'Harpreet', 'Deepa', 'Neha', 'Aniyawari',
+  'Aniya', 'Sunita', 'Vikram', 'Ananya', 'Harpreet', 'Deepa', 'Neha', 'Aniyawari',
   'Mohit', 'Pooja', 'Amit', 'Sanjay', 'Preeti', 'Karan', 'Meenakshi', 'Gaurav',
   'Tarun', 'Shweta', 'Pankaj', 'Ritu', 'Manish', 'Suman', 'Alok', 'Bhavna',
   'Vikas', 'Kavita', 'Nitin', 'Divya', 'Ashish', 'Seema', 'Varun', 'Swati'

@@ -19,7 +19,7 @@ export const SupplierComparisonView: React.FC<SupplierComparisonViewProps> = ({
 
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
-      
+
       {/* HEADER BAR */}
       <div className="flex items-center gap-3">
         <button
@@ -32,7 +32,7 @@ export const SupplierComparisonView: React.FC<SupplierComparisonViewProps> = ({
           <h1 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
             Best Wholesale Suppliers
           </h1>
-          <p className="text-xs text-slate-500 font-medium">Sourced by AI Bazaar for Ramesh General Store</p>
+          <p className="text-xs text-slate-500 font-medium">Sourced by AI Bazaar for Aniya General Store</p>
         </div>
       </div>
 
@@ -56,11 +56,10 @@ export const SupplierComparisonView: React.FC<SupplierComparisonViewProps> = ({
         {suppliers.map((sup) => (
           <div
             key={sup.id}
-            className={`munim-card p-6 transition-all ${
-              sup.isBestMatch
+            className={`munim-card p-6 transition-all ${sup.isBestMatch
                 ? 'bg-white border-2 border-[#1B3A6B]/50 shadow-md ring-4 ring-blue-50'
                 : 'bg-white border border-slate-200 hover:border-slate-300'
-            }`}
+              }`}
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
               <div>
@@ -100,11 +99,10 @@ export const SupplierComparisonView: React.FC<SupplierComparisonViewProps> = ({
               <span className="text-xs text-slate-500 font-medium">Includes free delivery &amp; GST invoice</span>
               <button
                 onClick={() => onSelectSupplier(sup)}
-                className={`px-5 py-2.5 rounded-xl font-extrabold text-xs shadow-xs transition-all active:scale-95 flex items-center gap-2 ${
-                  sup.isBestMatch
+                className={`px-5 py-2.5 rounded-xl font-extrabold text-xs shadow-xs transition-all active:scale-95 flex items-center gap-2 ${sup.isBestMatch
                     ? 'bg-[#1B3A6B] hover:bg-[#142d54] text-white'
                     : 'bg-slate-900 hover:bg-slate-800 text-white'
-                }`}
+                  }`}
               >
                 <span>Choose {sup.name}</span>
                 <ChevronRight className="w-4 h-4" />

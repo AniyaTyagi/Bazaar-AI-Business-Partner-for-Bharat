@@ -27,10 +27,10 @@ export const AppShell: React.FC<AppShellProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex flex-col md:flex-row font-sans">
-      
+
       {/* DESKTOP LEFT SIDEBAR */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 p-5 shrink-0 fixed inset-y-0 left-0 z-30 shadow-2xs">
-        
+
         {/* Brand Logo & Merchant Header */}
         <div className="pb-5 border-b border-slate-100 mb-6">
           <div className="flex items-center gap-2.5">
@@ -72,11 +72,10 @@ export const AppShell: React.FC<AppShellProps> = ({
         <nav className="space-y-1.5 flex-1">
           <button
             onClick={() => setActiveTab('home')}
-            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
-              activeTab === 'home'
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${activeTab === 'home'
                 ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
+              }`}
           >
             <Home className="w-4 h-4 shrink-0" />
             <span>Home</span>
@@ -84,30 +83,27 @@ export const AppShell: React.FC<AppShellProps> = ({
 
           <button
             onClick={() => setActiveTab('munim')}
-            className={`w-full px-3.5 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-between transition-colors ${
-              activeTab === 'munim'
+            className={`w-full px-3.5 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-between transition-colors ${activeTab === 'munim'
                 ? 'bg-[#1B3A6B] text-white shadow-sm'
                 : 'text-slate-700 bg-blue-50/60 hover:bg-blue-100/60 border border-blue-200/60'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-3">
               <Bot className="w-4 h-4 shrink-0" />
               <span>Munim AI</span>
             </div>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-              activeTab === 'munim' ? 'bg-white/20 text-white' : 'bg-blue-200 text-blue-900'
-            }`}>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${activeTab === 'munim' ? 'bg-white/20 text-white' : 'bg-blue-200 text-blue-900'
+              }`}>
               AI Restock
             </span>
           </button>
 
           <button
             onClick={() => setActiveTab('bazaar')}
-            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
-              activeTab === 'bazaar'
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${activeTab === 'bazaar'
                 ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
+              }`}
           >
             <ShoppingBag className="w-4 h-4 shrink-0" />
             <span>AI Bazaar Sourcing</span>
@@ -115,11 +111,10 @@ export const AppShell: React.FC<AppShellProps> = ({
 
           <button
             onClick={() => setActiveTab('health')}
-            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
-              activeTab === 'health'
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${activeTab === 'health'
                 ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
+              }`}
           >
             <HeartPulse className="w-4 h-4 shrink-0" />
             <span>Business Health</span>
@@ -127,11 +122,10 @@ export const AppShell: React.FC<AppShellProps> = ({
 
           <button
             onClick={() => setActiveTab('alerts')}
-            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-between transition-colors ${
-              activeTab === 'alerts'
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-between transition-colors ${activeTab === 'alerts'
                 ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
+              }`}
           >
             <div className="flex items-center gap-3">
               <Bell className="w-4 h-4 shrink-0" />
@@ -168,7 +162,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           </div>
           <div>
             <h1 className="font-extrabold text-sm text-[#1B3A6B] leading-tight">Munim</h1>
-            <p className="text-[10px] text-slate-500 font-medium">Ramesh General Store</p>
+            <p className="text-[10px] text-slate-500 font-medium">Aniya General Store</p>
           </div>
         </div>
 
@@ -208,9 +202,8 @@ export const AppShell: React.FC<AppShellProps> = ({
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-3 py-2 flex items-center justify-around shadow-lg">
         <button
           onClick={() => setActiveTab('home')}
-          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
-            activeTab === 'home' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
-          }`}
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${activeTab === 'home' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
+            }`}
         >
           <Home className="w-5 h-5" />
           <span className="text-[10px]">Home</span>
@@ -219,11 +212,10 @@ export const AppShell: React.FC<AppShellProps> = ({
         {/* Prominent Munim Tab */}
         <button
           onClick={() => setActiveTab('munim')}
-          className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all shadow-sm ${
-            activeTab === 'munim'
+          className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all shadow-sm ${activeTab === 'munim'
               ? 'bg-[#1B3A6B] text-white font-extrabold -mt-3 ring-4 ring-blue-100'
               : 'bg-blue-50 text-[#1B3A6B] font-bold border border-blue-200'
-          }`}
+            }`}
         >
           <Bot className="w-5 h-5" />
           <span className="text-[10px]">Munim</span>
@@ -231,9 +223,8 @@ export const AppShell: React.FC<AppShellProps> = ({
 
         <button
           onClick={() => setActiveTab('bazaar')}
-          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
-            activeTab === 'bazaar' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
-          }`}
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${activeTab === 'bazaar' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
+            }`}
         >
           <ShoppingBag className="w-5 h-5" />
           <span className="text-[10px]">Bazaar</span>
@@ -241,11 +232,10 @@ export const AppShell: React.FC<AppShellProps> = ({
 
         <button
           onClick={() => setActiveTab('more')}
-          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
-            activeTab === 'more' || activeTab === 'health' || activeTab === 'alerts'
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${activeTab === 'more' || activeTab === 'health' || activeTab === 'alerts'
               ? 'text-[#1B3A6B] font-bold'
               : 'text-slate-500 font-medium'
-          }`}
+            }`}
         >
           <HeartPulse className="w-5 h-5" />
           <span className="text-[10px]">More</span>

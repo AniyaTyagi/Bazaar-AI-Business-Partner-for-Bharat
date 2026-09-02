@@ -10,7 +10,7 @@ interface BusinessHealthViewProps {
 export const BusinessHealthView: React.FC<BusinessHealthViewProps> = ({ onOptimize }) => {
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
-      
+
       {/* HEADER BAR */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
@@ -18,7 +18,7 @@ export const BusinessHealthView: React.FC<BusinessHealthViewProps> = ({ onOptimi
             <span>Business Health Score</span>
             <span className="munim-badge-navy">Live Audit</span>
           </h1>
-          <p className="text-xs text-slate-500 font-bold mt-0.5">Ramesh General Store • Financial &amp; Operational Assessment</p>
+          <p className="text-xs text-slate-500 font-bold mt-0.5">Aniya General Store • Financial &amp; Operational Assessment</p>
         </div>
 
         <button
@@ -70,7 +70,7 @@ export const BusinessHealthView: React.FC<BusinessHealthViewProps> = ({ onOptimi
         </h3>
 
         <div className="space-y-4 text-xs font-bold">
-          
+
           <div>
             <div className="flex justify-between mb-1.5">
               <span className="text-slate-800 flex items-center gap-2">
