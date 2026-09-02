@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'BAZAAR — Your AI Business Partner for Bharat',
-  description: 'AI-powered merchant growth & finance engine for Indian merchants sitting on top of Razorpay payment ecosystem.',
+  title: 'Munim — AI Business Partner for Indian SMBs',
+  description: 'Munim is the brain, AI Bazaar is the commerce layer, and Razorpay is the payment infrastructure.',
 };
 
 export default function RootLayout({
@@ -16,9 +16,9 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-slate-50 text-slate-900 min-h-screen font-sans antialiased selection:bg-blue-600 selection:text-white">
+      <body className="bg-[#f8f9fa] text-slate-900 min-h-screen font-sans antialiased selection:bg-[#059669] selection:text-white">
         {children}
       </body>
     </html>

@@ -1,127 +1,187 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Navbar, DEMO_PRESETS } from '../components/Navbar';
-import { LandingHero } from '../components/LandingHero';
-import { DashboardView } from '../components/DashboardView';
-import { AIChatView } from '../components/AIChatView';
-import { CustomerIntelligenceView } from '../components/CustomerIntelligenceView';
-import { FinanceMunimView } from '../components/FinanceMunimView';
-import { EvaluationView } from '../components/EvaluationView';
-import { LaunchCampaignModal } from '../components/LaunchCampaignModal';
+import { AppShell, ActiveTab } from '../components/Navbar';
+import { HomeCommandCenter } from '../components/HomeCommandCenter';
+import { MunimChatView, SupplierOffer } from '../components/MunimChatView';
+import { SupplierComparisonView } from '../components/SupplierComparisonView';
+import { PaymentCheckoutModal } from '../components/PaymentCheckoutModal';
+import { OrderSuccessModal } from '../components/OrderSuccessModal';
+import { BazaarTabView } from '../components/BazaarTabView';
+import { BusinessHealthView } from '../components/BusinessHealthView';
+import { ProactiveAlertsView } from '../components/ProactiveAlertsView';
+import { VoiceAssistantModal } from '../components/VoiceAssistantModal';
 import { AuditLogsModal } from '../components/AuditLogsModal';
-import { AnalyticsService } from '../services/analytics';
-import { RazorpayService } from '../services/razorpay';
-import { ScenarioPreset } from '../types';
+import { SupportedLanguage } from '../services/multilingual';
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'chat' | 'customers' | 'munim' | 'eval'>('dashboard');
-  const [hasEntered, setHasEntered] = useState(false);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+  const [subView, setSubView] = useState<'main' | 'supplier_comparison'>('main');
   const [chatPrompt, setChatPrompt] = useState<string | undefined>(undefined);
-  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>('hinglish');
+
+  // Modals & Flows State
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierOffer | null>(null);
+  const [comparisonSuppliers, setComparisonSuppliers] = useState<SupplierOffer[]>([]);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
   const [isAuditLogsModalOpen, setIsAuditLogsModalOpen] = useState(false);
-  const [selectedPresetId, setSelectedPresetId] = useState<string | undefined>(undefined);
+  const [completedOrderInfo, setCompletedOrderInfo] = useState<{ id: string; amount: number; supplierName: string }>({
+    id: '',
+    amount: 0,
+    supplierName: '',
+  });
+
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const summary = AnalyticsService.getBusinessSummary();
-  const isLive = RazorpayService.isLiveMode();
-
-  const handleQuickAction = (promptText: string) => {
+  const handleAskMunim = (promptText: string) => {
     setChatPrompt(promptText);
-    setActiveTab('chat');
+    setSubView('main');
+    setActiveTab('munim');
   };
 
-  const handleSelectPreset = (preset: ScenarioPreset) => {
-    setSelectedPresetId(preset.id);
-    setChatPrompt(preset.prompt);
-    setActiveTab('chat');
+  const handleInitiatePayment = (supplier: SupplierOffer) => {
+    setSelectedSupplier(supplier);
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleCompareSuppliers = (suppliers: SupplierOffer[]) => {
+    setComparisonSuppliers(suppliers);
+    setSubView('supplier_comparison');
+    setActiveTab('munim');
+  };
+
+  const handlePaymentSuccess = (orderId: string, amount: number) => {
+    setIsCheckoutModalOpen(false);
+    setCompletedOrderInfo({
+      id: orderId,
+      amount,
+      supplierName: selectedSupplier?.name || 'Sharma Distributors',
+    });
+    setIsSuccessModalOpen(true);
   };
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-[#0052FF] animate-pulse mx-auto" />
-          <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Loading BAZAAR Enterprise Platform...</p>
+          <div className="w-12 h-12 rounded-2xl bg-[#1B3A6B] animate-pulse mx-auto flex items-center justify-center text-white font-black text-2xl">
+            M
+          </div>
+          <p className="text-xs font-black tracking-widest text-[#1B3A6B] uppercase">Starting Munim AI Business Copilot...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
-      {/* Enterprise Top Navbar Command Bar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isLiveMode={isLive}
-        onSelectPreset={handleSelectPreset}
-        selectedPresetId={selectedPresetId}
-        onToggleAuditLogs={() => setIsAuditLogsModalOpen(true)}
+    <AppShell
+      activeTab={activeTab}
+      setActiveTab={(tab) => {
+        setSubView('main');
+        setActiveTab(tab);
+      }}
+      selectedLanguage={selectedLanguage}
+      onLanguageChange={setSelectedLanguage}
+      onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+      onOpenAuditLogs={() => setIsAuditLogsModalOpen(true)}
+    >
+      {/* SCREEN 1 — HOME COMMAND CENTER */}
+      {activeTab === 'home' && (
+        <HomeCommandCenter
+          onAskMunim={handleAskMunim}
+          onNavigateToBazaar={() => setActiveTab('bazaar')}
+          onNavigateToHealth={() => setActiveTab('health')}
+        />
+      )}
+
+      {/* SCREEN 2 & 3 & 4 — MUNIM CHAT & HERO FLOW & SUPPLIER COMPARISON */}
+      {activeTab === 'munim' && (
+        <>
+          {subView === 'main' && (
+            <MunimChatView
+              initialPrompt={chatPrompt}
+              selectedLanguage={selectedLanguage}
+              onLanguageChange={setSelectedLanguage}
+              onInitiatePayment={handleInitiatePayment}
+              onCompareSuppliers={handleCompareSuppliers}
+              onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+            />
+          )}
+
+          {subView === 'supplier_comparison' && (
+            <SupplierComparisonView
+              suppliers={comparisonSuppliers}
+              onSelectSupplier={(sup) => {
+                setSubView('main');
+                handleInitiatePayment(sup);
+              }}
+              onBack={() => setSubView('main')}
+            />
+          )}
+        </>
+      )}
+
+      {/* SCREEN 7 — AI BAZAAR TAB */}
+      {activeTab === 'bazaar' && (
+        <BazaarTabView
+          onTriggerRestock={() => handleAskMunim("Kal ke liye samaan mangwana hai.")}
+        />
+      )}
+
+      {/* SCREEN 8 — BUSINESS HEALTH TAB */}
+      {activeTab === 'health' && (
+        <BusinessHealthView
+          onOptimize={handleAskMunim}
+        />
+      )}
+
+      {/* SCREEN 9 & 10 — PROACTIVE ALERTS / MORE */}
+      {(activeTab === 'alerts' || activeTab === 'more') && (
+        <ProactiveAlertsView
+          onAction={handleAskMunim}
+        />
+      )}
+
+      {/* SCREEN 5 — CONFIRM ORDER & PAYMENT CHECKOUT MODAL */}
+      <PaymentCheckoutModal
+        isOpen={isCheckoutModalOpen}
+        supplier={selectedSupplier}
+        onClose={() => setIsCheckoutModalOpen(false)}
+        onPaymentSuccess={handlePaymentSuccess}
       />
 
-      {/* Main Enterprise Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6">
-        
-        {/* Landing Hero Card for Initial Welcome */}
-        {!hasEntered && activeTab === 'dashboard' && (
-          <LandingHero onEnter={() => setHasEntered(true)} />
-        )}
-
-        {/* Enterprise Views */}
-        {activeTab === 'dashboard' && (
-          <DashboardView summary={summary} onQuickAction={handleQuickAction} />
-        )}
-
-        {activeTab === 'chat' && (
-          <AIChatView
-            initialPrompt={chatPrompt}
-            onLaunchCampaign={() => setIsCampaignModalOpen(true)}
-          />
-        )}
-
-        {activeTab === 'customers' && (
-          <CustomerIntelligenceView onTargetSegment={handleQuickAction} />
-        )}
-
-        {activeTab === 'munim' && (
-          <FinanceMunimView onAskMunim={handleQuickAction} />
-        )}
-
-        {activeTab === 'eval' && (
-          <EvaluationView />
-        )}
-
-      </main>
-
-      {/* Interactive Launch Campaign Modal */}
-      <LaunchCampaignModal
-        isOpen={isCampaignModalOpen}
-        onClose={() => setIsCampaignModalOpen(false)}
+      {/* SCREEN 6 — ORDER SUCCESS MODAL */}
+      <OrderSuccessModal
+        isOpen={isSuccessModalOpen}
+        orderId={completedOrderInfo.id}
+        amount={completedOrderInfo.amount}
+        supplierName={completedOrderInfo.supplierName}
+        onClose={() => {
+          setIsSuccessModalOpen(false);
+          setActiveTab('home');
+        }}
       />
 
-      {/* Enterprise API Audit Logs Modal */}
+      {/* VOICE ASSISTANT MODAL */}
+      <VoiceAssistantModal
+        isOpen={isVoiceModalOpen}
+        selectedLanguage={selectedLanguage}
+        onLanguageChange={setSelectedLanguage}
+        onClose={() => setIsVoiceModalOpen(false)}
+        onSelectVoicePrompt={handleAskMunim}
+      />
+
+      {/* RAZORPAY API AUDIT LOGS MODAL */}
       <AuditLogsModal
         isOpen={isAuditLogsModalOpen}
         onClose={() => setIsAuditLogsModalOpen(false)}
       />
-
-      {/* Persistent Enterprise Footer */}
-      <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-[#0C2340]">BAZAAR</span>
-            <span>— Enterprise AI Copilot for Razorpay Merchants</span>
-          </div>
-          <div className="text-slate-500 font-mono text-[11px]">
-            Production API v2.4 • PCI-DSS Level 1 Compliant • MID: rzp_m_9831a4f8
-          </div>
-        </div>
-      </footer>
-    </div>
+    </AppShell>
   );
 }

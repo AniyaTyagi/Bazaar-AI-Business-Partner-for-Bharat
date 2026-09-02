@@ -5,14 +5,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
+  --background: #f8f9fa;
   --foreground: #0f172a;
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
+  --munim-navy: #1B3A6B;
+  --munim-green: #059669;
+  --munim-green-light: #ecfdf5;
   --razor-blue: #0052ff;
-  --razor-navy: #0c2340;
-  --razor-emerald: #059669;
-  --razor-amber: #d97706;
+  --razor-navy: #1B3A6B;
+  --amber-warn: #d97706;
 }
 
 body {
@@ -42,11 +44,11 @@ body {
   background: #94a3b8;
 }
 
-/* Micro Animations */
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -57,7 +59,7 @@ body {
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -66,51 +68,92 @@ body {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.25s ease-out forwards;
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 .animate-slideUp {
-  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Enterprise Panel Utilities */
-.razor-panel {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
-}
-
-
-.razor-card {
+/* Munim Clean Fintech Utilities */
+.munim-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease;
 }
 
-.razor-card:hover {
+.munim-card:hover {
   border-color: #cbd5e1;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.06), 0 4px 8px -4px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
 }
 
-.razor-card-accent {
+.munim-chip {
   background: #ffffff;
-  border: 1px solid rgba(0, 82, 255, 0.25);
-  border-radius: 1rem;
-  box-shadow: 0 4px 20px -2px rgba(0, 82, 255, 0.08);
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
 }
 
-/* Custom Gradient Text */
-.gradient-text-blue {
-  background: linear-gradient(135deg, #0052FF 0%, #0037B3 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.munim-chip:hover {
+  border-color: #1B3A6B;
+  color: #1B3A6B;
+  background: #f0f4f9;
 }
 
-.gradient-text-emerald {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.munim-badge-navy {
+  background: #f0f4f9;
+  color: #1B3A6B;
+  border: 1px solid #c3d2e6;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
+.munim-badge-green {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.munim-badge-amber {
+  background: #fffbe6;
+  color: #d97706;
+  border: 1px solid #fde68a;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.munim-badge-red {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}

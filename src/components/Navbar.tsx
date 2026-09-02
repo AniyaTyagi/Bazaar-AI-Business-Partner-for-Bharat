@@ -1,315 +1,257 @@
 'use client';
 
-import React, { useState } from 'react';
-import { 
-  Store, 
-  Sparkles, 
-  TrendingUp, 
-  Wallet, 
-  Users, 
-  Play, 
-  Code2, 
-  BrainCircuit,
-  Database,
-  Building2,
-  Download,
-  Search,
-  Activity,
-  Bell,
-  ShieldCheck,
-  ChevronDown,
-  Layers,
-  Terminal,
-  Menu,
-  X
-} from 'lucide-react';
-import { ScenarioPreset } from '../types';
-import { AnalyticsService } from '../services/analytics';
+import React from 'react';
+import { Home, Bot, ShoppingBag, HeartPulse, Bell, Settings, ShieldCheck, UserCheck, ChevronRight, Globe } from 'lucide-react';
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../services/multilingual';
 
-interface NavbarProps {
-  activeTab: 'dashboard' | 'chat' | 'customers' | 'munim' | 'eval';
-  setActiveTab: (tab: 'dashboard' | 'chat' | 'customers' | 'munim' | 'eval') => void;
-  isLiveMode: boolean;
-  onSelectPreset: (preset: ScenarioPreset) => void;
-  selectedPresetId?: string;
-  onToggleAuditLogs?: () => void;
+export type ActiveTab = 'home' | 'munim' | 'bazaar' | 'health' | 'alerts' | 'more';
+
+interface AppShellProps {
+  activeTab: ActiveTab;
+  setActiveTab: (tab: ActiveTab) => void;
+  selectedLanguage: SupportedLanguage;
+  onLanguageChange: (lang: SupportedLanguage) => void;
+  onOpenVoiceModal?: () => void;
+  onOpenAuditLogs?: () => void;
+  children: React.ReactNode;
 }
 
-export const DEMO_PRESETS: ScenarioPreset[] = [
-  {
-    id: 's1',
-    title: 'Scenario 1: Executive Sales Overview',
-    prompt: 'What happened with my business today?',
-    targetAgent: 'bazaar',
-    description: 'Bazaar analyzes today\'s ₹48,320 sales (+14.2%) and evening surge.'
-  },
-  {
-    id: 's2',
-    title: 'Scenario 2: Monday Dip Root Cause',
-    prompt: 'Why did my sales drop last Monday?',
-    targetAgent: 'bazaar',
-    description: 'Bazaar inspects 5,000 TXs to uncover 32% drop in 6-9 PM repeat customers.'
-  },
-  {
-    id: 's3',
-    title: 'Scenario 3: RFM Customer Targeting',
-    prompt: 'Which customers should I target for maximum revenue?',
-    targetAgent: 'bazaar',
-    description: 'Bazaar identifies 47 dormant high-value customers.'
-  },
-  {
-    id: 's4',
-    title: 'Scenario 4: Working Capital Liquidity',
-    prompt: 'How much money do I actually have and when is my next settlement?',
-    targetAgent: 'munim',
-    description: 'Munim checks ₹31.2K settlement & ₹18.5K supplier dues to confirm cash cushion.'
-  },
-  {
-    id: 's5',
-    title: 'Scenario 5: Joint Campaign Decision',
-    prompt: 'Should I run a weekend offer for my store?',
-    targetAgent: 'joint',
-    description: 'Bazaar & Munim collaborate to create & budget a ₹5,000 campaign.'
-  }
-];
-
-export const Navbar: React.FC<NavbarProps> = ({
+export const AppShell: React.FC<AppShellProps> = ({
   activeTab,
   setActiveTab,
-  isLiveMode,
-  onSelectPreset,
-  selectedPresetId,
-  onToggleAuditLogs
+  selectedLanguage,
+  onLanguageChange,
+  onOpenVoiceModal,
+  onOpenAuditLogs,
+  children,
 }) => {
-  const [activeBranch, setActiveBranch] = useState('Lajpat Nagar Flagship');
-  const [isOrgDropdownOpen, setIsOrgDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const tabs: Array<{ id: 'dashboard' | 'chat' | 'customers' | 'munim' | 'eval'; label: string; icon: React.ComponentType<any>; color: string }> = [
-    { id: 'dashboard', label: 'Executive Overview', icon: TrendingUp, color: 'bg-[#0052FF]' },
-    { id: 'chat', label: 'AI Operations Copilot', icon: BrainCircuit, color: 'bg-[#0052FF]' },
-    { id: 'customers', label: 'Customer CRM & RFM', icon: Users, color: 'bg-[#0052FF]' },
-    { id: 'munim', label: 'RazorpayX & Munim', icon: Wallet, color: 'bg-[#059669]' },
-    { id: 'eval', label: 'Benchmarking & Audit', icon: Code2, color: 'bg-amber-500' }
-  ];
-
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex flex-col md:flex-row font-sans">
       
-      {/* Enterprise Top System Bar */}
-      <div className="bg-[#0C2340] text-slate-200 text-xs px-4 lg:px-8 py-1.5 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00D084] animate-pulse" />
-            <span className="font-mono font-bold text-slate-100 tracking-wider">RAZORPAY ENTERPRISE PLATFORM</span>
-            <span className="text-slate-500 hidden sm:inline">•</span>
-            <span className="text-slate-300 font-mono hidden sm:inline text-[11px]">MID: rzp_m_9831a4f8</span>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-2 border-l border-slate-700 pl-4 text-slate-300 text-[11px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#00D084]" />
-            <span>Production API v2.4</span>
-            <span className="text-slate-500">|</span>
-            <span className="text-emerald-400 font-medium">99.99% Gateway Uptime</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => AnalyticsService.exportTransactionsCSV()}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-semibold transition-all text-[11px] border border-slate-700 hover:border-slate-600"
-          >
-            <Download className="w-3 h-3 text-[#0052FF]" />
-            <span className="hidden sm:inline">Export CSV</span>
-          </button>
-
-          {onToggleAuditLogs && (
-            <button
-              onClick={onToggleAuditLogs}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-semibold transition-all text-[11px] border border-slate-700 hover:border-slate-600"
-            >
-              <Terminal className="w-3 h-3 text-amber-400" />
-              <span className="hidden sm:inline">API Audit</span>
-            </button>
-          )}
-
-          <div className="flex items-center gap-1 bg-emerald-950/80 border border-emerald-700/60 px-2 py-0.5 rounded-md text-[10px] text-emerald-300 font-bold tracking-wider">
-            <span>LIVE</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Enterprise Navigation Header */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex items-center justify-between gap-4">
+      {/* DESKTOP LEFT SIDEBAR */}
+      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 p-5 shrink-0 fixed inset-y-0 left-0 z-30 shadow-2xs">
         
-        {/* Merchant & Outlet Selector */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0052FF] to-[#0037B3] flex items-center justify-center text-white shadow-md font-black tracking-tight text-xl ring-2 ring-blue-500/20">
-            B
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setIsOrgDropdownOpen(!isOrgDropdownOpen)}
-              className="text-left group flex items-center gap-2 focus:outline-none"
-            >
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-xl tracking-tight text-[#0C2340]">BAZAAR</span>
-                  <span className="text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#0052FF] border border-blue-200/80">
-                    Enterprise Copilot
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5">
-                  <Building2 className="w-3.5 h-3.5 text-[#0052FF]" />
-                  <span className="font-bold text-slate-900">Sharma General Store</span>
-                  <span className="text-slate-300">•</span>
-                  <span className="text-[#0052FF] font-semibold flex items-center gap-1">
-                    {activeBranch}
-                    <ChevronDown className="w-3 h-3" />
-                  </span>
-                </p>
+        {/* Brand Logo & Merchant Header */}
+        <div className="pb-5 border-b border-slate-100 mb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#1B3A6B] flex items-center justify-center text-white font-black text-lg shadow-sm">
+              M
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-lg text-[#1B3A6B] tracking-tight">Munim</span>
+                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-blue-50 text-[#1B3A6B] border border-blue-200">
+                  AI BRAIN
+                </span>
               </div>
-            </button>
-
-            {/* Branch Dropdown */}
-            {isOrgDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-2 text-xs space-y-1 animate-fadeIn">
-                <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Merchant Branch</div>
-                {[
-                  'Lajpat Nagar Flagship',
-                  'Karol Bagh Outlet',
-                  'Connaught Place Superstore'
-                ].map((branch) => (
-                  <button
-                    key={branch}
-                    onClick={() => {
-                      setActiveBranch(branch);
-                      setIsOrgDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-between ${
-                      activeBranch === branch ? 'bg-blue-50 text-[#0052FF]' : 'text-slate-700 hover:bg-slate-50'
-                    }`}
-                  >
-                    <span>{branch}</span>
-                    {activeBranch === branch && <span className="w-2 h-2 rounded-full bg-[#0052FF]" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Desktop Navigation Tabs */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  isActive
-                    ? `${tab.color} text-white shadow-sm scale-[1.02]`
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Right Section: Scenario Presets & Mobile Toggle */}
-        <div className="flex items-center gap-3">
-          <div className="hidden xl:flex items-center gap-3">
-            <div className="relative">
-              <select
-                onChange={(e) => {
-                  const p = DEMO_PRESETS.find(pr => pr.id === e.target.value);
-                  if (p) onSelectPreset(p);
-                }}
-                value={selectedPresetId || ''}
-                className="bg-white text-slate-800 border border-slate-300 text-xs rounded-xl px-3.5 py-2 pr-9 focus:outline-none focus:border-[#0052FF] cursor-pointer appearance-none shadow-xs font-bold hover:border-slate-400 transition-colors"
-              >
-                <option value="" disabled>⚡ Scenario Benchmarks</option>
-                {DEMO_PRESETS.map(preset => (
-                  <option key={preset.id} value={preset.id}>
-                    {preset.title}
-                  </option>
-                ))}
-              </select>
-              <Play className="w-3 h-3 text-[#0052FF] absolute right-3 top-3 pointer-events-none" />
+              <p className="text-[11px] text-slate-500 font-medium">Business Copilot for SMBs</p>
             </div>
           </div>
 
-          {/* Mobile Hamburger Toggle */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors"
-            aria-label="Toggle navigation menu"
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-
-      </div>
-
-      {/* Mobile Drawer Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-3 animate-fadeIn shadow-lg">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">Navigation Views</div>
-          <div className="grid grid-cols-1 gap-1.5">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-left ${
-                    isActive
-                      ? `${tab.color} text-white shadow-sm`
-                      : 'text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Mobile Scenario Presets */}
-          <div className="pt-2 border-t border-slate-100">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1 block mb-1.5">Preset Scenario Benchmarks</label>
+          {/* Multilingual Selector */}
+          <div className="mt-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+            <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-slate-400 uppercase">
+              <Globe className="w-3 h-3 text-[#1B3A6B]" />
+              <span>Select Voice &amp; App Language</span>
+            </div>
             <select
-              onChange={(e) => {
-                const p = DEMO_PRESETS.find(pr => pr.id === e.target.value);
-                if (p) {
-                  onSelectPreset(p);
-                  setIsMobileMenuOpen(false);
-                }
-              }}
-              value={selectedPresetId || ''}
-              className="w-full bg-slate-50 text-slate-800 border border-slate-200 text-xs rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-[#0052FF] font-bold"
+              value={selectedLanguage}
+              onChange={(e) => onLanguageChange(e.target.value as SupportedLanguage)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-[#1B3A6B] focus:outline-none focus:border-[#1B3A6B]"
             >
-              <option value="" disabled>⚡ Executive Scenario Benchmarks</option>
-              {DEMO_PRESETS.map(preset => (
-                <option key={preset.id} value={preset.id}>
-                  {preset.title}
+              {SUPPORTED_LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.flag} {l.nativeName}
                 </option>
               ))}
             </select>
           </div>
         </div>
-      )}
-    </header>
+
+        {/* Sidebar Primary Links */}
+        <nav className="space-y-1.5 flex-1">
+          <button
+            onClick={() => setActiveTab('home')}
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
+              activeTab === 'home'
+                ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+            }`}
+          >
+            <Home className="w-4 h-4 shrink-0" />
+            <span>Home</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('munim')}
+            className={`w-full px-3.5 py-2.5 rounded-xl font-extrabold text-xs flex items-center justify-between transition-colors ${
+              activeTab === 'munim'
+                ? 'bg-[#1B3A6B] text-white shadow-sm'
+                : 'text-slate-700 bg-blue-50/60 hover:bg-blue-100/60 border border-blue-200/60'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Bot className="w-4 h-4 shrink-0" />
+              <span>Munim AI</span>
+            </div>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+              activeTab === 'munim' ? 'bg-white/20 text-white' : 'bg-blue-200 text-blue-900'
+            }`}>
+              AI Restock
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('bazaar')}
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
+              activeTab === 'bazaar'
+                ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+            }`}
+          >
+            <ShoppingBag className="w-4 h-4 shrink-0" />
+            <span>AI Bazaar Sourcing</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('health')}
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-3 transition-colors ${
+              activeTab === 'health'
+                ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+            }`}
+          >
+            <HeartPulse className="w-4 h-4 shrink-0" />
+            <span>Business Health</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('alerts')}
+            className={`w-full px-3.5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-between transition-colors ${
+              activeTab === 'alerts'
+                ? 'bg-blue-50 text-[#1B3A6B] border border-blue-200/80 shadow-2xs'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Bell className="w-4 h-4 shrink-0" />
+              <span>Proactive Monitoring</span>
+            </div>
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+          </button>
+        </nav>
+
+        {/* Sidebar Footer Trust Badge */}
+        <div className="pt-4 border-t border-slate-100 space-y-2">
+          <button
+            onClick={onOpenAuditLogs}
+            className="w-full px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-bold flex items-center justify-between transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#1B3A6B]" />
+              <span>Razorpay Verified API</span>
+            </div>
+            <ChevronRight className="w-3 h-3 text-slate-400" />
+          </button>
+
+          <p className="text-[10px] text-center text-slate-400 font-medium pt-1">
+            Munim v3.2 • Unified AI Commerce Engine
+          </p>
+        </div>
+      </aside>
+
+      {/* MOBILE TOP BAR */}
+      <header className="md:hidden sticky top-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-2xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#1B3A6B] flex items-center justify-center text-white font-black text-base shadow-xs">
+            M
+          </div>
+          <div>
+            <h1 className="font-extrabold text-sm text-[#1B3A6B] leading-tight">Munim</h1>
+            <p className="text-[10px] text-slate-500 font-medium">Ramesh General Store</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {/* Mobile Language Selector */}
+          <select
+            value={selectedLanguage}
+            onChange={(e) => onLanguageChange(e.target.value as SupportedLanguage)}
+            className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-[#1B3A6B]"
+          >
+            {SUPPORTED_LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>
+                {l.flag} {l.name}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={() => setActiveTab('alerts')}
+            className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 relative"
+            aria-label="Alerts"
+          >
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500" />
+          </button>
+        </div>
+      </header>
+
+      {/* MAIN CONTAINER SHELL */}
+      <main className="flex-1 md:pl-64 min-h-screen flex flex-col pb-20 md:pb-6">
+        <div className="max-w-6xl w-full mx-auto p-4 md:p-8 flex-1">
+          {children}
+        </div>
+      </main>
+
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-3 py-2 flex items-center justify-around shadow-lg">
+        <button
+          onClick={() => setActiveTab('home')}
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
+            activeTab === 'home' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
+          }`}
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-[10px]">Home</span>
+        </button>
+
+        {/* Prominent Munim Tab */}
+        <button
+          onClick={() => setActiveTab('munim')}
+          className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all shadow-sm ${
+            activeTab === 'munim'
+              ? 'bg-[#1B3A6B] text-white font-extrabold -mt-3 ring-4 ring-blue-100'
+              : 'bg-blue-50 text-[#1B3A6B] font-bold border border-blue-200'
+          }`}
+        >
+          <Bot className="w-5 h-5" />
+          <span className="text-[10px]">Munim</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('bazaar')}
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
+            activeTab === 'bazaar' ? 'text-[#1B3A6B] font-bold' : 'text-slate-500 font-medium'
+          }`}
+        >
+          <ShoppingBag className="w-5 h-5" />
+          <span className="text-[10px]">Bazaar</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('more')}
+          className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors ${
+            activeTab === 'more' || activeTab === 'health' || activeTab === 'alerts'
+              ? 'text-[#1B3A6B] font-bold'
+              : 'text-slate-500 font-medium'
+          }`}
+        >
+          <HeartPulse className="w-5 h-5" />
+          <span className="text-[10px]">More</span>
+        </button>
+      </nav>
+
+    </div>
   );
 };
-
