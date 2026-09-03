@@ -110,8 +110,12 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
     }
   ];
 
+  const handledPromptRef = useRef<string | null>(null);
+  const isRestockRunningRef = useRef(false);
+
   useEffect(() => {
-    if (initialPrompt) {
+    if (initialPrompt && handledPromptRef.current !== initialPrompt) {
+      handledPromptRef.current = initialPrompt;
       handleSendPrompt(initialPrompt);
     }
   }, [initialPrompt]);
@@ -123,15 +127,23 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
   const handleSendPrompt = async (promptText: string) => {
     if (!promptText.trim()) return;
 
-    const userMsgId = `usr_${Date.now()}`;
-    const newMsg = {
-      id: userMsgId,
-      sender: 'user' as const,
-      text: promptText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+    setMessages(prev => {
+      const lastUserMsg = prev.slice().reverse().find(m => m.sender === 'user');
+      if (lastUserMsg && lastUserMsg.text === promptText && (Date.now() - parseInt(lastUserMsg.id.replace('usr_', '') || '0')) < 1000) {
+        return prev;
+      }
+      const userMsgId = `usr_${Date.now()}`;
+      return [
+        ...prev,
+        {
+          id: userMsgId,
+          sender: 'user' as const,
+          text: promptText,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        }
+      ];
+    });
 
-    setMessages(prev => [...prev, newMsg]);
     setInputMessage('');
 
     // Fetch dynamic multilingual answer from MultilingualService
@@ -141,41 +153,53 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
       triggerSmartRestockFlow(responseText);
     } else {
       setTimeout(() => {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `mun_${Date.now()}`,
-            sender: 'munim',
-            text: responseText,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        setMessages(prev => {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg && lastMsg.sender === 'munim' && lastMsg.text === responseText) {
+            return prev;
           }
-        ]);
+          return [
+            ...prev,
+            {
+              id: `mun_${Date.now()}`,
+              sender: 'munim',
+              text: responseText,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }
+          ];
+        });
         MultilingualService.speakText(responseText, selectedLanguage);
       }, 600);
     }
   };
 
   const triggerSmartRestockFlow = (customAnswerText?: string) => {
+    if (isRestockRunningRef.current) return;
+    isRestockRunningRef.current = true;
+
     setActiveRestockStep('analyzing');
     const { text: translatedText } = MultilingualService.getAnswer('restock', selectedLanguage);
     const step1Text = customAnswerText || translatedText;
 
     // Step 1: Munim initial response
     setTimeout(() => {
-      setMessages(prev => [
-        ...prev,
-        {
-          id: `mun_restock_1`,
-          sender: 'munim',
-          text: step1Text,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isRestockFlow: true,
-          restockData: {
-            step: 'recommendation',
-            items: defaultSuppliers[0].items
+      setMessages(prev => {
+        if (prev.some(m => m.id === `mun_restock_1`)) return prev;
+        return [
+          ...prev,
+          {
+            id: `mun_restock_1`,
+            sender: 'munim',
+            text: step1Text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isRestockFlow: true,
+            restockData: {
+              step: 'recommendation',
+              items: defaultSuppliers[0].items
+            }
           }
-        }
-      ]);
+        ];
+      });
       MultilingualService.speakText(step1Text, selectedLanguage);
       setActiveRestockStep('recommendation');
 
@@ -191,22 +215,26 @@ export const MunimChatView: React.FC<MunimChatViewProps> = ({
 
           const step2Text = `AI Bazaar found Sharma Distributors! They offer Milk (+40), Maggi (+50), and Coke (+30) for ₹3,770 with delivery tomorrow. Save ₹1,240 vs retail.`;
 
-          setMessages(prev => [
-            ...prev,
-            {
-              id: `mun_restock_2`,
-              sender: 'munim',
-              text: step2Text,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              isRestockFlow: true,
-              restockData: {
-                step: 'best_match',
-                items: bestSupplier.items,
-                supplier: bestSupplier
+          setMessages(prev => {
+            if (prev.some(m => m.id === `mun_restock_2`)) return prev;
+            return [
+              ...prev,
+              {
+                id: `mun_restock_2`,
+                sender: 'munim',
+                text: step2Text,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                isRestockFlow: true,
+                restockData: {
+                  step: 'best_match',
+                  items: bestSupplier.items,
+                  supplier: bestSupplier
+                }
               }
-            }
-          ]);
+            ];
+          });
           MultilingualService.speakText(step2Text, selectedLanguage);
+          isRestockRunningRef.current = false;
         }, 1800);
       }, 1200);
     }, 800);

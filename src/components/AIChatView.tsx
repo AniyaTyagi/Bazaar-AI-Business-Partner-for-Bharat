@@ -44,8 +44,11 @@ export const AIChatView: React.FC<AIChatViewProps> = ({ initialPrompt, onLaunchC
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
 
+  const handledPromptRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (initialPrompt) {
+    if (initialPrompt && handledPromptRef.current !== initialPrompt) {
+      handledPromptRef.current = initialPrompt;
       handleSendQuery(initialPrompt);
     }
   }, [initialPrompt]);

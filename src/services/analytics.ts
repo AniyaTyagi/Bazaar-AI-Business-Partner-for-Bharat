@@ -1,5 +1,5 @@
 import { generateCustomers, generateTransactions, generateSettlements, generateExpenses, PRODUCTS_CATALOG } from '../data/syntheticData';
-import { Transaction, Customer, Product, Settlement, Expense, BusinessSummary, PaymentMethod, WebhookEvent } from '../types';
+import { Transaction, Customer, Product, Settlement, Expense, BusinessSummary, PaymentMethod, WebhookEvent, Offer } from '../types';
 
 let customersData: Customer[] = generateCustomers();
 let transactionsData: Transaction[] = generateTransactions(customersData);
@@ -351,5 +351,36 @@ export class AnalyticsService {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  static getOffers(): Offer[] {
+    return [
+      {
+        id: 'off_001',
+        title: 'Weekend Kitchen Special',
+        code: 'KITCHEN50',
+        discountType: 'flat',
+        discountValue: 50,
+        minOrderValue: 499,
+        targetSegment: 'Dormant High-Value Customers (47)',
+        expectedUpside: '+12% order volume (Est. +₹8,500)',
+        status: 'active'
+      },
+      {
+        id: 'off_002',
+        title: 'Atta + Oil Combo Saver',
+        code: 'COMBO85',
+        discountType: 'flat',
+        discountValue: 85,
+        minOrderValue: 699,
+        targetSegment: 'All Grocery Buyers',
+        expectedUpside: '+₹85 AOV increase',
+        status: 'draft'
+      }
+    ];
+  }
+
+  static getAuditLogs() {
+    return webhookEventsData;
   }
 }

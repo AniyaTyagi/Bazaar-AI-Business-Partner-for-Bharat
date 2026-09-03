@@ -10,71 +10,58 @@ export class RazorpayService {
   }
 
   public static async getPayments(limit: number = 100): Promise<Transaction[]> {
-    if (this.isLiveMode()) {
-      try {
-        // Live server-side fetch from Razorpay API
-        const auth = Buffer.from(`${this.keyId}:${this.keySecret}`).toString('base64');
-        const res = await fetch(`https://api.razorpay.com/v1/payments?count=${limit}`, {
-          headers: { Authorization: `Basic ${auth}` }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Map to internal format if needed
-          return data.items || [];
-        }
-      } catch (err) {
-        console.warn('Razorpay Live API fetch failed, falling back to Demo dataset:', err);
+    try {
+      const res = await fetch(`/api/razorpay/payments?limit=${limit}`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.items || [];
       }
+    } catch (err) {
+      console.warn('Backend API fetch for payments failed, falling back to local dataset:', err);
     }
-    // Demo Mode Fallback
     return AnalyticsService.getTransactions().slice(0, limit);
   }
 
   public static async getSettlements(): Promise<Settlement[]> {
-    if (this.isLiveMode()) {
-      try {
-        const auth = Buffer.from(`${this.keyId}:${this.keySecret}`).toString('base64');
-        const res = await fetch(`https://api.razorpay.com/v1/settlements`, {
-          headers: { Authorization: `Basic ${auth}` }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          return data.items || [];
-        }
-      } catch (err) {
-        console.warn('Razorpay Live Settlements API failed, using Demo dataset:', err);
+    try {
+      const res = await fetch(`/api/razorpay/settlements`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.items || [];
       }
+    } catch (err) {
+      console.warn('Backend API fetch for settlements failed, using local dataset:', err);
     }
     return AnalyticsService.getSettlements();
   }
 
   public static async getCustomers(): Promise<Customer[]> {
+    try {
+      const res = await fetch(`/api/analytics?type=customers`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('Backend API fetch for customers failed, using local dataset:', err);
+    }
     return AnalyticsService.getCustomers();
   }
 
   public static async createPaymentLink(amount: number, description: string, customerPhone: string) {
-    if (this.isLiveMode()) {
-      try {
-        const auth = Buffer.from(`${this.keyId}:${this.keySecret}`).toString('base64');
-        const res = await fetch(`https://api.razorpay.com/v1/payment_links`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Basic ${auth}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            amount: amount * 100, // paise
-            currency: 'INR',
-            description,
-            customer: { contact: customerPhone },
-            notify: { sms: true }
-          })
-        });
-        if (res.ok) return await res.json();
-      } catch (err) {
-        console.warn('Live payment link creation failed:', err);
+    try {
+      const res = await fetch(`/api/razorpay/payments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, description, customerPhone })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.link;
       }
+    } catch (err) {
+      console.warn('Backend payment link creation failed:', err);
     }
+    
     // Synthetic link fallback
     const mockId = `plink_${Math.floor(Math.random() * 899999 + 100000)}`;
     return {

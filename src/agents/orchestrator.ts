@@ -9,6 +9,29 @@ export class AgentOrchestrator {
     userPrompt: string,
     forcedAgent?: 'bazaar' | 'munim' | 'joint'
   ): Promise<AgentMessage> {
+    // Attempt backend API route processing first
+    if (typeof window !== 'undefined') {
+      try {
+        const res = await fetch('/api/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: userPrompt, forcedAgent })
+        });
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch (err) {
+        console.warn('Backend /api/agent call failed, falling back to local orchestrator:', err);
+      }
+    }
+
+    return this.processQueryLocal(userPrompt, forcedAgent);
+  }
+
+  public static async processQueryLocal(
+    userPrompt: string,
+    forcedAgent?: 'bazaar' | 'munim' | 'joint'
+  ): Promise<AgentMessage> {
     const promptLower = userPrompt.toLowerCase();
 
     // Determine agent persona
